@@ -1,0 +1,52 @@
+# 이력서 원본. 이 파일만 고치면 된다. 비워 둔 항목은 출력에서 빠진다.
+basics:
+  name: 홍길동
+  title: 백엔드 개발자
+  email: you@example.com
+  phone: ""
+  location: 서울
+  links:
+    - label: GitHub
+      url: https://github.com/uwonu606
+    - label: Blog
+      url: ""
+  summary: >
+    두세 문장으로 나를 요약한다. 무엇을 만들어 왔고, 무엇을 잘하고,
+    어떤 일을 하고 싶은지.
+
+skills:
+  - category: 언어
+    items: [Java, TypeScript, Python]
+  - category: 프레임워크
+    items: [Spring Boot, React]
+  - category: 인프라
+    items: [Docker, GitHub Actions, AWS]
+
+experience:
+  - company: 회사 이름
+    role: 직무
+    period: 2025.01 – 현재
+    location: 서울
+    bullets:
+      - 무엇을 왜 만들었고 결과가 어땠는지 한 줄로. 수치가 있으면 붙인다.
+      - 문제 → 선택한 방법 → 결과 순으로 쓰면 읽기 쉽다.
+
+projects:
+  - name: 프로젝트 이름
+    period: 2024.09 – 2024.12
+    url: https://github.com/uwonu606/example
+    description: 한 줄 설명. 누구를 위한 무엇인가.
+    stack: [Spring Boot, PostgreSQL, Docker]
+    bullets:
+      - 맡은 역할과 가장 어려웠던 문제, 그리고 어떻게 풀었는지.
+
+education:
+  - school: 학교 이름
+    degree: 학과 · 학위
+    period: 2019.03 – 2023.02
+    note: ""
+
+certificates:
+  - name: 자격증 이름
+    date: 2024.06
+    issuer: 발급 기관
