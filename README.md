@@ -11,6 +11,7 @@
 | `src/style.css` | 모양. A4 한 장 기준 |
 | `src/build.mjs` | HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다 |
 | `.github/workflows/build.yml` | main 에 push 하면 빌드해서 GitHub Pages 에 올린다 |
+| `docs/` | 이력서에 무엇을 담을지 정하는 리서치. 역량 문서와 출처 로그 |
 
 ## 쓰는 법
 
