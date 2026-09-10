@@ -14,7 +14,7 @@ AI 네이티브 신입 개발자를 위한 양식이다. 전통 이력서와 칸
 | `docs/ai-agent-developer-competencies.md` | 근거가 된 리서치. 역량 열 개와 이력서 근거의 종류 |
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |
 | `src/style.css` | 모양. 여러 장을 흐르게 두고 항목 하나는 쪼개지지 않게 한다. 한 장보다 긴 항목은 쪼개지고, 한 장에 들어가도 남은 자리보다 크면 통째로 밀려 앞 장이 빈다 |
-| `src/build.mjs` | HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다 |
+| `src/build.mjs` | HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다. 값이 잘린 줄과 한 장을 넘는 항목을 경고한다 |
 | `.github/workflows/build.yml` | main 에 push 하면 빌드해서 GitHub Pages 에 올린다 |
 
 ## 쓰는 법
@@ -26,6 +26,8 @@ npm run build:html   # PDF 없이 HTML 만 (브라우저 없을 때)
 ```
 
 다른 내용으로 뽑고 싶으면 yaml 을 하나 더 두고 `node src/build.mjs --input resume.backend.yaml`.
+
+빌드는 두 가지를 경고한다 — 따옴표를 안 쳐서 `#` 뒤가 주석으로 먹힌 값, 그리고 한 장(1017px)을 넘어 장 경계에서 쪼개질 항목. 둘 다 경고일 뿐 빌드는 멈추지 않는다.
 
 ## 배포
 
