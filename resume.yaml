@@ -3,44 +3,57 @@
 # 값에 # 이 들어가면(PR 번호 등) 따옴표로 감싼다. 안 그러면 YAML 이 주석으로 먹는다.
 
 basics:
-  name: 홍길동
-  title: 백엔드 개발자
-  email: you@example.com
+  name: Claude
+  title: 코딩 에이전트
+  email: ""
   phone: ""
-  location: 서울
+  location: ""
   links:
-    - label: GitHub
-      url: https://github.com/uwonu606
-    - label: Blog
-      url: ""
+    - label: 리포
+      url: https://github.com/uwonu606/resume
+    - label: 뽑힌 결과
+      url: https://uwonu606.github.io/resume/
   # 한 문장. 에이전트가 만든 것이 아니라 내가 맡은 것이 무엇인가.
   # 아래 항목 최소 둘로 증명되지 않으면 자기소개일 뿐이니 문장을 고친다.
-  summary: 구현은 에이전트에게 맡기고, 무엇을 옳음으로 볼지는 직접 정해 온 백엔드 개발자.
+  summary: 무엇을 옳음으로 볼지를 먼저 정해 코드로 내리고, 내가 낸 답을 그 기준으로 잘라내며 일한다.
 
 # 프로젝트당 판단 하나. judgment 네 칸을 채울 수 없으면 항목으로 두지 않는다.
 # 판단이 둘 이상이면 프로젝트를 둘로 나눠 쓰거나 하나를 고른다.
 # 네 칸이 모두 비면 그 항목은 출력에서 빠진다 — 채우면 나타난다.
 projects:
-  - name: 프로젝트 이름
-    period: 2024.09 – 2024.12
-    description: 한 줄 설명. 누구를 위한 무엇인가.
-    repo: https://github.com/uwonu606/example
-    live: ""        # 지금 열리는 주소만 적는다. 죽은 링크는 비운다.
-    operation: ""   # 운영 기간·사용자 수. 있을 때만.
+  - name: 판단을 묻는 이력서 양식
+    period: 2026.09
+    description: 만든 것 대신 판단을 묻는 칸으로 짠 이력서 양식과, yaml 하나로 HTML·PDF 를 뽑는 도구.
+    repo: https://github.com/uwonu606/resume
+    live: https://uwonu606.github.io/resume/
+    operation: ""    # 지금 열리는 주소만 적는다. 죽은 링크는 비운다.
     judgment:
-      criterion: ""    # 무엇을 완료·옳음으로 봤나. 그 기준을 누가 정했나.
-      delegated: ""    # 무엇을 어디까지 에이전트에게 맡겼나.
-      verification: "" # 어떻게 확인했나. PR·커밋 주소를 적어도 된다. ("... (PR #41)" 처럼 # 이 있으면 따옴표 필수)
-      discarded: ""    # 무엇을 버렸나. 에이전트가 낸 답 중 왜 그것을 안 골랐나.
-      not_used: ""     # (선택) AI 를 안 쓰기로 한 결정, 또는 결과를 되돌린 사례.
+      criterion: 양식이 됐다는 판정을 "칸이 다 찼는가" 가 아니라 "채워 보면 억지 문장이 안 나오는가" 로 뒀다. 채우는 쪽이 사람이라 강제하면 억지로 채워지기 때문이다. 그래서 검사기를 넣지 않고 규약 다섯 줄을 쓴 뒤 그중 둘만 출력이 지키게 했다.
+      delegated: 규약 검사는 사람의 눈이 아니라 렌더러에 맡겼다. 무엇이 항목이 될 만한 판단인지 고르는 일은 맡기지 않고 채우는 사람에게 남겼다.
+      verification: 두 번 채워서 확인했다. 가상 인물로 한 번(commit df683e5), 이 파일을 내 내용으로 한 번. 두 번째는 두 장을 넘기는 분량이라 PDF 에서 항목이 장 경계에 걸리는지까지 봤다.
+      discarded: 못 채운 칸을 모아 주는 스크립트를 두자는 안을 버렸다. 관리할 물건이 하나 늘고 그 정합성을 맞추는 일이 새 병목이 된다. 빈 칸은 그 자리에서 보이는 것으로 충분하다.
+      not_used: 판단 문장이 좋은지를 LLM 으로 검사하게 하지 않았다. 검사기를 두면 검사기를 통과하는 문장을 쓰게 되고, 그게 이 양식이 막으려던 것이다.
+
+  - name: 에이전트를 쓰는 개발자에게 요구하는 것
+    period: 2026.09
+    description: 회사 공식 자료와 개인 글 91건에서 역량 열 개를 뽑고 원문 발췌를 남긴 문서. 위 양식의 칸이 여기서 나왔다.
+    repo: https://github.com/uwonu606/resume/blob/main/docs/ai-agent-developer-competencies.md
+    live: ""
+    operation: ""
+    judgment:
+      criterion: 무엇을 근거로 칠지를 찾기 전에 먼저 정했다. 2025-01-01 이후, 서비스를 운영하는 회사의 1차 자료. 모델과 코딩 에이전트를 파는 회사, 그리고 그 소속으로 쓴 글은 뺐다 — 나를 만든 회사가 거기 든다.
+      delegated: 91건을 찾아 열고 발췌를 뽑는 일은 검색과 페치에 맡겼다. 무엇을 근거로 칠지와 열 개로 묶는 일은 맡기지 않았다.
+      verification: 인용마다 원문을 직접 열었는지(1차)와 기사로 대신했는지(2차)를 표시했다. 끝내 못 연 18건은 지우지 않고 "확인하지 못한 것" 표에 이름과 이유로 남겼다.
+      discarded: 출처가 엇갈리는 다섯 쟁점을 한 문장으로 합치지 않고 양쪽을 그대로 뒀다. 신입 시장이 줄었다는 쪽과 지금이 뽑을 때라는 쪽처럼, 합치면 근거가 아니라 내 판단이 된다.
+      not_used: ""
 
 # 인턴·계약·아르바이트. 회사 이름이 정보값을 가질 때만 쓴다.
 # 칸은 프로젝트와 같다. 기간과 담당 업무를 늘어놓는 자리가 아니다.
 experience:
   - company: 회사 이름
     role: 직무
-    period: 2025.01 – 2025.03
-    location: 서울
+    period: ""
+    location: ""
     judgment:
       criterion: ""
       delegated: ""
@@ -51,29 +64,33 @@ experience:
 # 에이전트가 직접 소비하는 것만. 스킬·컨텍스트 파일·훅·린터·CI·워크플로.
 # 반복되던 문제와 넣은 장치를 못 적으면 항목이 아니다 — 둘 다 비면 출력에서 빠진다.
 environment:
-  - name: 만든 것 이름
-    repo: ""        # 리포나 리포 안 경로.
-    problem: ""     # 에이전트가 반복하던 실수나 반복 작업이 무엇이었나.
-    device: ""      # 무엇을 넣어 그것을 막았나.
+  - name: 채워진 예시 한 벌
+    repo: https://github.com/uwonu606/resume/blob/main/sample.filled.yaml
+    problem: 빈 양식만 렌더하면 칸이 안 채워진 것인지 렌더가 깨진 것인지 구별할 수 없었다.
+    device: '다 채운 예시 하나를 리포에 두고 같은 명령으로 뽑는다. YAML 이 확인 칸의 "(PR #41)" 을 주석으로 먹어 문장이 잘리던 것을 이걸로 찾았다.'
+  - name: 규약을 지키는 렌더러
+    repo: https://github.com/uwonu606/resume/blob/main/src/render.mjs
+    problem: 규약을 문서에만 적어 두면 어겨도 아무 일이 일어나지 않는다.
+    device: 판단 네 칸이 모두 빈 항목과 문제·장치가 모두 빈 도구를 오류 없이 뺀다. 출력이 규약과 같은 말을 한다.
+  - name: push 마다 도는 빌드
+    repo: https://github.com/uwonu606/resume/blob/main/.github/workflows/build.yml
+    problem: 로컬에서만 뽑으면 yaml 을 고친 뒤 배포된 PDF 가 뒤처진다.
+    device: main 에 push 하면 HTML·PDF 를 다시 뽑아 Pages 에 올린다. 이력서에 적는 주소가 항상 최신이다.
 
 # 이름 나열이 아니라 깊이를 가르는 칸이다.
 skills:
-  hands_on: [Java, Spring Boot, PostgreSQL]   # 직접 써서 만든 것.
-  can_read: [Kubernetes, Kafka]               # 직접 만들지는 않았지만 읽고 고칠 수 있는 것.
+  hands_on: [Node.js, YAML, CSS 인쇄 레이아웃, Playwright, GitHub Actions, git]
+  can_read: []                                # 이 리포에서는 읽기만 한 것이 없다. 다 직접 썼다.
 
 # 배운 것을 남에게 옮긴 흔적. 글·발표·팀에 들여온 도구.
 writing:
-  - title: 글 제목
-    url: ""
-    note: ""        # 한 줄. 무엇을 다뤘나.
+  - title: 이 양식이 무엇을 묻는가
+    url: https://github.com/uwonu606/resume/blob/main/docs/format.md
+    note: 칸마다 왜 그 모양인지, 그리고 두지 않기로 한 칸
+  - title: 출처 로그 91건
+    url: https://github.com/uwonu606/resume/blob/main/docs/ai-agent-developer-sources.md
+    note: 인용 원문과 1차·2차 표시, 못 확인한 것
 
-education:
-  - school: 학교 이름
-    degree: 학과 · 학위
-    period: 2019.03 – 2023.02
-    note: ""
+education: []
 
-certificates:
-  - name: 자격증 이름
-    date: 2024.06
-    issuer: 발급 기관
+certificates: []
