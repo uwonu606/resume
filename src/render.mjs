@@ -14,10 +14,11 @@ const fields = (pairs) => {
     : "";
 };
 
-// 일급 칸 넷 중 하나라도 채워져야 항목이다. 다 비면 출력에서 빠진다 (docs/format.md#규약).
-const judged = (j = {}) => [j.criterion, j.delegated, j.verification, j.discarded].some(has);
+// 일급 칸 다섯 중 하나라도 채워져야 항목이다. 다 비면 출력에서 빠진다 (docs/format.md#규약).
+// impact 는 이 가지에서 더한 칸이다 — 공고가 비즈니스 영향을 여섯 줄에 걸쳐 되묻는다.
+const judged = (j = {}) => [j.criterion, j.delegated, j.verification, j.discarded, j.impact].some(has);
 
-// 일급 칸 넷 + 선택 하나. 프로젝트와 경력이 같은 칸을 쓴다.
+// 일급 칸 다섯 + 선택 하나. 프로젝트와 경력이 같은 칸을 쓴다.
 // 한 상자로 묶어 항목 맨 앞에 둔다. 판단을 앞세우는 장치는 이것 하나다 (docs/design.md#장치).
 const judgment = (j = {}) => {
   const body = fields([
@@ -25,12 +26,13 @@ const judgment = (j = {}) => {
     ["맡긴 것", esc(j.delegated)],
     ["확인", esc(j.verification)],
     ["버린 것", esc(j.discarded)],
+    ["누가 무엇을 얻나", esc(j.impact)],
     ["안 쓴 결정", esc(j.not_used)],
   ]);
   return body ? `<div class="judgment">${body}</div>` : "";
 };
 
-// 리포·주소·운영은 훑기의 넷째 단. 라벨을 떼고 설명 줄 아래 한 줄로 붙인다.
+// 리포·주소는 훑기의 넷째 단. 라벨을 떼고 설명 줄 아래 한 줄로 붙인다.
 const meta = (pairs) => {
   const kept = pairs.filter(([, v]) => has(v));
   return kept.length
@@ -69,7 +71,7 @@ const projects = (rows = []) =>
           head: esc(r.name),
           sub: esc(r.description),
           period: r.period,
-          body: meta([["리포", url(r.repo)], ["주소", url(r.live)], ["운영", esc(r.operation)]]) + judgment(r.judgment),
+          body: meta([["리포", url(r.repo)], ["주소", url(r.live)]]) + judgment(r.judgment),
         })
       )
       .join("")
@@ -141,9 +143,10 @@ const writing = (rows = []) => {
   );
 };
 
-const education = (rows = []) =>
+// 학위와 과정을 가른다. 같은 모양이라 한 함수로 찍고 제목만 달리 준다.
+const schooling = (title) => (rows = []) =>
   section(
-    "학력",
+    title,
     rows
       .filter((r) => has(r.school))
       .map((r) =>
@@ -156,6 +159,9 @@ const education = (rows = []) =>
       )
       .join("")
   );
+
+const training = schooling("교육");
+const education = schooling("학력");
 
 const certificates = (rows = []) => {
   const kept = rows.filter((r) => has(r.name));
@@ -189,6 +195,7 @@ ${experience(data.experience)}
 ${environment(data.environment)}
 ${skills(data.skills)}
 ${writing(data.writing)}
+${training(data.training)}
 ${education(data.education)}
 ${certificates(data.certificates)}
 </body>
