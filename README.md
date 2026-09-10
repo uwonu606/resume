@@ -10,7 +10,7 @@
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |
 | `src/style.css` | 모양. A4 한 장 기준 |
 | `src/build.mjs` | HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다 |
-| `.github/workflows/build.yml` | main 에 push 하면 PDF 를 만들어 artifact 로 올린다 |
+| `.github/workflows/build.yml` | main 에 push 하면 빌드해서 GitHub Pages 에 올린다 |
 
 ## 쓰는 법
 
@@ -21,6 +21,13 @@ npm run build:html   # PDF 없이 HTML 만 (브라우저 없을 때)
 ```
 
 다른 내용으로 뽑고 싶으면 yaml 을 하나 더 두고 `node src/build.mjs --input resume.backend.yaml`.
+
+## 배포
+
+main 에 push 하면 GitHub Pages 에 자동으로 올라간다.
+
+- 웹: https://uwonu606.github.io/resume/
+- PDF: https://uwonu606.github.io/resume/resume.pdf
 
 ## 내용 쓸 때
 
