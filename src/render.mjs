@@ -113,12 +113,12 @@ const skills = (s = {}) => {
   );
 };
 
-const writing = (rows = []) =>
-  section(
+const writing = (rows = []) => {
+  const kept = rows.filter((r) => has(r.title));
+  return section(
     "배움과 공유",
-    has(rows)
-      ? `<ul class="plain">${rows
-          .filter((r) => has(r.title))
+    kept.length
+      ? `<ul class="plain">${kept
           .map(
             (r) =>
               `<li>${has(r.url) ? `<a href="${esc(r.url)}">${esc(r.title)}</a>` : esc(r.title)}${
@@ -128,11 +128,13 @@ const writing = (rows = []) =>
           .join("")}</ul>`
       : ""
   );
+};
 
 const education = (rows = []) =>
   section(
     "학력",
     rows
+      .filter((r) => has(r.school))
       .map((r) =>
         entry({
           head: esc(r.school),
@@ -144,11 +146,12 @@ const education = (rows = []) =>
       .join("")
   );
 
-const certificates = (rows = []) =>
-  section(
+const certificates = (rows = []) => {
+  const kept = rows.filter((r) => has(r.name));
+  return section(
     "자격증",
-    has(rows)
-      ? `<ul class="plain">${rows
+    kept.length
+      ? `<ul class="plain">${kept
           .map(
             (r) =>
               `<li><span class="row"><span>${esc(r.name)}${
@@ -158,6 +161,7 @@ const certificates = (rows = []) =>
           .join("")}</ul>`
       : ""
   );
+};
 
 export function render(data, css) {
   return `<!doctype html>
