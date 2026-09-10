@@ -11,6 +11,7 @@ AI 네이티브 신입 개발자를 위한 양식이다. 전통 이력서와 칸
 | `resume.yaml` | 이력서 내용. 고치는 건 이 파일뿐. 칸마다 무엇을 묻는지 주석에 한 줄 |
 | `sample.filled.yaml` | 채워진 예시. 가상 인물이다. `node src/build.mjs --input sample.filled.yaml` |
 | `docs/format.md` | 그 칸이 왜 있는지. 규약 다섯 줄과 버린 것 |
+| `docs/design.md` | 그 칸이 왜 그 자리에 그 무게로 놓이는지. 위계·장치·길이 제약·판정 방법 |
 | `docs/ai-agent-developer-competencies.md` | 근거가 된 리서치. 역량 열 개와 이력서 근거의 종류 |
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |
 | `src/style.css` | 모양. 여러 장을 흐르게 두고 항목 하나는 쪼개지지 않게 한다. 한 장보다 긴 항목은 쪼개지고, 한 장에 들어가도 남은 자리보다 크면 통째로 밀려 앞 장이 빈다 |
