@@ -27,5 +27,11 @@ dl.fields dd { margin: 0; }
 
 ul.plain { list-style: none; margin: 4px 0 0; padding: 0; }
 li { margin-bottom: 2px; }
+
+/* 기술 섹션은 라벨이 길어 격자로 두면 값이 84pt 밀리고 다른 섹션과 어긋난다.
+   두 줄뿐이라 라벨을 값 앞에 붙이고, 장이 넘어갈 때 갈라지지 않게 묶는다. */
+ul.skills { break-inside: avoid; }
+ul.skills .k { color: var(--muted); font-size: 8.5pt; margin-right: 4px; }
+
 @page { size: A4; }
 @media print { body { padding: 0; max-width: none; } }

@@ -96,14 +96,22 @@ const environment = (rows = []) =>
       .join("")
   );
 
-const skills = (s = {}) =>
-  section(
+// 라벨이 길어(읽고 고칠 수 있는 것) 격자로 두면 값이 한참 오른쪽으로 밀린다.
+// 두 줄뿐인 섹션이라 라벨을 값 앞에 붙여 흐르게 두고, 장이 넘어갈 때 둘이 갈라지지 않게 묶는다.
+const skills = (s = {}) => {
+  const rows = [
+    ["직접 쓴 것", s.hands_on],
+    ["읽고 고칠 수 있는 것", s.can_read],
+  ].filter(([, v]) => has(v));
+  return section(
     "기술",
-    fields([
-      ["직접 쓴 것", has(s.hands_on) ? s.hands_on.map(esc).join(", ") : ""],
-      ["읽고 고칠 수 있는 것", has(s.can_read) ? s.can_read.map(esc).join(", ") : ""],
-    ])
+    rows.length
+      ? `<ul class="plain skills">${rows
+          .map(([k, v]) => `<li><span class="k">${esc(k)}</span> ${v.map(esc).join(", ")}</li>`)
+          .join("")}</ul>`
+      : ""
   );
+};
 
 const writing = (rows = []) =>
   section(
