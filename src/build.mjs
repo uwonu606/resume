@@ -1,8 +1,8 @@
 // resume.yaml → dist/resume.html (+ dist/resume.pdf)
 // 사용: node src/build.mjs [--html-only] [--input resume.yaml]
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
 import { render } from "./render.mjs";
 
@@ -35,7 +35,11 @@ const css = readFileSync(resolve(root, "src/style.css"), "utf8");
 const html = render(data, css);
 
 const dist = resolve(root, "dist");
-mkdirSync(dist, { recursive: true });
+mkdirSync(resolve(dist, "fonts"), { recursive: true });
+
+// 글꼴은 HTML 이 상대 경로로 가리킨다. dist 에 같이 둬야 웹과 PDF 가 같은 파일을 본다.
+copyFileSync(resolve(root, "assets/fonts/Pretendard.woff2"), resolve(dist, "fonts/Pretendard.woff2"));
+
 const htmlPath = resolve(dist, "resume.html");
 writeFileSync(htmlPath, html);
 console.log("wrote", htmlPath);
@@ -44,7 +48,8 @@ if (!htmlOnly) {
   const { chromium } = await import("playwright");
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: pageW, height: pageH } });
-  await page.setContent(html, { waitUntil: "networkidle" });
+  // setContent 는 상대 경로를 못 푼다. 파일로 열어야 글꼴이 실린다.
+  await page.goto(pathToFileURL(htmlPath).href, { waitUntil: "networkidle" });
 
   // 한 장보다 긴 항목은 break-inside: avoid 로도 못 막고 장 경계에서 쪼개진다. 인쇄 폭으로 재야 줄바꿈이 PDF 와 같다.
   await page.emulateMedia({ media: "print" });
