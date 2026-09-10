@@ -9,6 +9,7 @@ AI 네이티브 신입 개발자를 위한 양식이다. 전통 이력서와 칸
 | 파일 | 역할 |
 | --- | --- |
 | `resume.yaml` | 이력서 내용. 고치는 건 이 파일뿐. 칸마다 무엇을 묻는지 주석에 한 줄 |
+| `sample.filled.yaml` | 채워진 예시. 가상 인물이다. `node src/build.mjs --input sample.filled.yaml` |
 | `docs/format.md` | 그 칸이 왜 있는지. 규약 다섯 줄과 버린 것 |
 | `docs/ai-agent-developer-competencies.md` | 근거가 된 리서치. 역량 열 개와 이력서 근거의 종류 |
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |

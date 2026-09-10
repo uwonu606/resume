@@ -1,0 +1,63 @@
+basics:
+  name: 김가온
+  title: 백엔드 개발자
+  email: gaon@example.com
+  location: 서울
+  links:
+    - label: GitHub
+      url: https://github.com/example
+  summary: 구현은 에이전트에게 맡기고, 무엇을 옳음으로 볼지는 직접 정해 온 백엔드 개발자.
+
+projects:
+  - name: 회의록 이슈 추출기
+    period: 2026.03 – 2026.06
+    description: 회의 녹음에서 팀이 답해야 할 질문만 뽑아 남기는 도구.
+    repo: https://github.com/example/meeting-issues
+    live: https://example.github.io/meeting-issues/
+    operation: 사내 4개 팀, 3개월
+    judgment:
+      criterion: 요약 품질을 사람이 읽고 판정하는 대신, 회의에서 실제로 답이 나온 질문만 정답으로 두고 재현율로 셌다. 판정 셋 40건을 먼저 만들고 시작했다.
+      delegated: 전사 파이프라인과 화자 분리 붙이는 일을 에이전트에게 맡겼다. 이슈 판정 규칙은 직접 썼다.
+      verification: "판정 셋을 CI 에서 매 PR 마다 돌려 재현율이 떨어지면 병합을 막았다 (PR #41)."
+      discarded: 에이전트가 낸 첫 안은 LLM 이 이슈 여부까지 판단하게 했다. 같은 회의를 두 번 넣으면 결과가 달라져서 버리고, 판정을 규칙으로 내렸다.
+      not_used: 화자 이름 매칭은 규칙 20줄로 끝나는 일이라 에이전트를 쓰지 않았다.
+
+experience:
+  - company: 스퀘어랩
+    role: 백엔드 인턴
+    period: 2026.01 – 2026.02
+    location: 서울
+    judgment:
+      criterion: 배치 재처리 작업의 완료 기준을 "실패 건이 0" 이 아니라 "실패 사유가 모두 분류됨" 으로 다시 정의했다.
+      delegated: 재처리 스크립트와 분류 리포트 생성을 맡겼다.
+      verification: 운영 데이터 복본에 돌려 분류 안 된 사유가 남는지 확인했다.
+      discarded: 실패 건을 자동 재시도하자는 안을 버렸다. 원인이 데이터 쪽이라 재시도가 같은 실패를 반복했다.
+
+environment:
+  - name: 스펙 먼저 쓰게 하는 스킬
+    repo: https://github.com/example/dotclaude/tree/main/skills/spec-first
+    problem: 에이전트가 범위를 넓혀 관련 없는 파일까지 고치는 일이 반복됐다.
+    device: 작업 전 범위 안팎과 완료 기준을 한 장으로 쓰게 하고, 그 문서 밖 파일을 고치면 훅이 막는다.
+  - name: 판정 셋 러너
+    repo: https://github.com/example/meeting-issues/tree/main/eval
+    problem: 프롬프트를 고칠 때마다 품질 변화를 눈으로 확인하고 있었다.
+    device: 판정 셋을 한 줄 명령으로 돌려 재현율을 찍고, CI 가 같은 명령을 쓴다.
+
+skills:
+  hands_on: [Java, Spring Boot, PostgreSQL, Docker, GitHub Actions]
+  can_read: [Kafka, Kubernetes, Terraform]
+
+writing:
+  - title: LLM 판단을 규칙으로 내린 이유
+    url: https://example.com/posts/rules-over-llm
+    note: 같은 입력에 다른 답이 나오는 문제를 어떻게 잡았나
+
+education:
+  - school: 한국대학교
+    degree: 컴퓨터공학 · 학사
+    period: 2021.03 – 2025.02
+
+certificates:
+  - name: 정보처리기사
+    date: 2025.06
+    issuer: 한국산업인력공단
