@@ -17,11 +17,18 @@ a { color: var(--accent); text-decoration: none; }
 .sep { margin: 0 6px; color: var(--line); }
 .muted { color: var(--muted); }
 
-/* 위계 1단: 이름·직함. 2단: 요약 (docs/design.md#위계). */
+/* 위계 1단: 이름·직함. 2단: 요약. 사진은 머리글 높이 안, 3:4. 좁아지면 이름 위로 (docs/design.md#위계). */
+header { display: flex; gap: 16px; align-items: flex-start; }
+header .who { flex: 1; min-width: 0; }
 header h1 { font-size: 24pt; font-weight: 700; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
 header .title { margin: 2px 0 6px; color: var(--muted); font-size: 12pt; }
 header .contact { margin: 0; font-size: 9.5pt; }
 header .summary { margin: 10px 0 0; font-size: 12pt; font-weight: 500; line-height: 1.5; }
+header .photo { width: 27mm; aspect-ratio: 3 / 4; object-fit: cover; flex: none; background: var(--box); }
+@media (max-width: 480px) {
+  header { flex-direction: column-reverse; }
+  header .photo { width: 24mm; }
+}
 
 /* 여러 장을 흐르게 둔다. 섹션은 쪼개지되 항목 하나는 쪼개지지 않는다. */
 section { margin-top: 18px; }

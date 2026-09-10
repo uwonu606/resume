@@ -3,6 +3,7 @@ basics:
   title: 백엔드 개발자
   email: gaon@example.com
   location: 서울
+  photo: assets/photo.sample.svg
   links:
     - label: GitHub
       url: https://github.com/example

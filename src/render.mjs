@@ -38,14 +38,18 @@ const meta = (pairs) => {
     : "";
 };
 
+// 사진은 머리글 오른쪽, 3:4. 경로가 비면 자리째로 빠진다 (docs/design.md#색·글꼴·사진).
 function header(b = {}) {
   const contact = [b.email, b.phone, b.location].filter(has).map(esc);
   const links = (b.links ?? []).map(link).filter(Boolean);
   return `<header>
-  <h1>${esc(b.name)}</h1>
-  ${has(b.title) ? `<p class="title">${esc(b.title)}</p>` : ""}
-  <p class="contact">${[...contact, ...links].join('<span class="sep">·</span>')}</p>
-  ${has(b.summary) ? `<p class="summary">${esc(b.summary.trim())}</p>` : ""}
+  <div class="who">
+    <h1>${esc(b.name)}</h1>
+    ${has(b.title) ? `<p class="title">${esc(b.title)}</p>` : ""}
+    <p class="contact">${[...contact, ...links].join('<span class="sep">·</span>')}</p>
+    ${has(b.summary) ? `<p class="summary">${esc(b.summary.trim())}</p>` : ""}
+  </div>
+  ${has(b.photo) ? `<img class="photo" src="${esc(b.photo)}" alt="">` : ""}
 </header>`;
 }
 

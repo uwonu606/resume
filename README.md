@@ -16,7 +16,7 @@ AI 네이티브 신입 개발자를 위한 양식이다. 전통 이력서와 칸
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |
 | `src/style.css` | 모양. 판단 칸을 옅은 상자로 묶어 앞세우고, 여러 장을 흐르게 두되 항목 하나는 쪼개지지 않게 한다. 왜 이 모양인지는 `docs/design.md` |
 | `assets/fonts/` | Pretendard 한글 서브셋. 빌드가 `dist/fonts/` 로 복사해 웹과 PDF 가 같은 글꼴을 쓴다 |
-| `src/build.mjs` | 글꼴을 `dist/` 로 복사하고, HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다. 값이 잘린 줄과 한 장을 넘는 항목을 경고한다 |
+| `src/build.mjs` | 글꼴과 사진을 `dist/` 로 복사하고, HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다. 값이 잘린 줄과 한 장을 넘는 항목을 경고한다 |
 | `.github/workflows/build.yml` | main 에 push 하면 빌드해서 GitHub Pages 에 올린다 |
 
 ## 쓰는 법
@@ -46,4 +46,5 @@ main 에 push 하면 GitHub Pages 에 자동으로 올라간다.
 - 판단 네 칸을 채울 수 없는 프로젝트는 항목이 아니다. 한 항목에 판단은 하나.
 - 죽은 링크는 칸을 비운다.
 - 항목을 비우면(`""` 또는 `[]`) 출력에서 빠지므로 틀을 지우지 않아도 된다.
+- 사진은 `basics.photo` 에 3:4 파일 경로를 적는다. 비우면 자리째로 빠진다.
 - 빈 칸은 게으름이 아니라 지금 없는 근거다. 그게 다음에 뭘 만들지의 입력이 된다.

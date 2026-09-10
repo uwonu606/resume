@@ -8,6 +8,7 @@ basics:
   email: ""
   phone: ""
   location: ""
+  photo: ""        # 3:4 사진 파일 경로. 이 파일 기준 상대 경로. 비우면 자리째로 빠진다.
   links:
     - label: 리포
       url: https://github.com/uwonu606/resume
