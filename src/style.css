@@ -1,35 +1,49 @@
+/* 왜 이 모양인지는 docs/design.md. 여기는 값만. */
 @font-face {
   font-family: "Pretendard";
   src: url("fonts/Pretendard.woff2") format("woff2");
   font-weight: 100 900;
   font-display: swap;
 }
-:root { --ink: #1a1a1a; --muted: #666; --line: #ddd; --accent: #2b5797; }
+:root { --ink: #1a1a1a; --muted: #6b6b6b; --line: #dcdcdc; --box: #f4f4f2; --accent: #2b5797; }
 * { box-sizing: border-box; }
 body {
   font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
-  color: var(--ink); font-size: 10.5pt; line-height: 1.55; max-width: 190mm; margin: 0 auto; padding: 8mm 0;
+  color: var(--ink); background: #fff; color-scheme: light only;
+  font-size: 10.5pt; line-height: 1.55; max-width: 190mm; margin: 0 auto; padding: 8mm 16px;
+  word-break: keep-all; overflow-wrap: anywhere;
 }
 a { color: var(--accent); text-decoration: none; }
-header h1 { font-size: 22pt; margin: 0; letter-spacing: -0.02em; }
+.sep { margin: 0 6px; color: var(--line); }
+.muted { color: var(--muted); }
+
+/* 위계 1단: 이름·직함. 2단: 요약 (docs/design.md#위계). */
+header h1 { font-size: 24pt; font-weight: 700; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
 header .title { margin: 2px 0 6px; color: var(--muted); font-size: 12pt; }
 header .contact { margin: 0; font-size: 9.5pt; }
-header .sep { margin: 0 6px; color: var(--line); }
-header .summary { margin: 10px 0 0; font-size: 11pt; }
+header .summary { margin: 10px 0 0; font-size: 12pt; font-weight: 500; line-height: 1.5; }
 
 /* 여러 장을 흐르게 둔다. 섹션은 쪼개지되 항목 하나는 쪼개지지 않는다. */
 section { margin-top: 18px; }
-h2 { font-size: 12pt; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 3px; margin: 0 0 8px; break-after: avoid; }
-article { margin-bottom: 12px; break-inside: avoid; }
+h2 { font-size: 11pt; font-weight: 700; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 3px; margin: 0 0 8px; break-after: avoid; }
+article { margin-bottom: 14px; break-inside: avoid; }
 .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.row strong { font-size: 11pt; }
 .period { color: var(--muted); font-size: 9.5pt; white-space: nowrap; }
 .sub { color: var(--muted); font-size: 9.5pt; }
-.muted { color: var(--muted); }
+
+/* 넷째 단. 라벨 없이 한 줄. */
+.meta { margin: 2px 0 0; font-size: 9pt; }
+.meta .k { color: var(--muted); margin-right: 3px; }
+
+/* 위계 3단, 장치 하나. 판단 네 칸을 옅은 배경 상자로 (docs/design.md#장치). */
+.judgment { margin: 6px 0 0; padding: 7px 10px; background: var(--box); border-radius: 3px; }
 
 /* 라벨은 작고 흐리게, 값은 본문 크기로. 훑을 때는 값만 읽히고 자세히 볼 때 라벨이 잡힌다. */
-dl.fields { display: grid; grid-template-columns: max-content 1fr; gap: 1px 10px; margin: 5px 0 0; }
+dl.fields { display: grid; grid-template-columns: max-content 1fr; gap: 1px 10px; margin: 0; }
 dl.fields dt { color: var(--muted); font-size: 8.5pt; white-space: nowrap; padding-top: 2.5px; }
 dl.fields dd { margin: 0; }
+article > dl.fields { margin-top: 5px; }
 
 ul.plain { list-style: none; margin: 4px 0 0; padding: 0; }
 li { margin-bottom: 2px; }
@@ -40,4 +54,7 @@ ul.skills { break-inside: avoid; }
 ul.skills .k { color: var(--muted); font-size: 8.5pt; margin-right: 4px; }
 
 @page { size: A4; }
-@media print { body { padding: 0; max-width: none; } }
+@media print {
+  body { padding: 0; max-width: none; }
+  .judgment { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

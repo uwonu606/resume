@@ -14,7 +14,7 @@ AI 네이티브 신입 개발자를 위한 양식이다. 전통 이력서와 칸
 | `docs/design.md` | 그 칸이 왜 그 자리에 그 무게로 놓이는지. 위계·장치·길이 제약·판정 방법 |
 | `docs/ai-agent-developer-competencies.md` | 근거가 된 리서치. 역량 열 개와 이력서 근거의 종류 |
 | `src/render.mjs` | 데이터를 HTML 로 바꾼다. 비어 있는 항목은 자동으로 빠진다 |
-| `src/style.css` | 모양. 여러 장을 흐르게 두고 항목 하나는 쪼개지지 않게 한다. 한 장보다 긴 항목은 쪼개지고, 한 장에 들어가도 남은 자리보다 크면 통째로 밀려 앞 장이 빈다 |
+| `src/style.css` | 모양. 판단 칸을 옅은 상자로 묶어 앞세우고, 여러 장을 흐르게 두되 항목 하나는 쪼개지지 않게 한다. 왜 이 모양인지는 `docs/design.md` |
 | `assets/fonts/` | Pretendard 한글 서브셋. 빌드가 `dist/fonts/` 로 복사해 웹과 PDF 가 같은 글꼴을 쓴다 |
 | `src/build.mjs` | 글꼴을 `dist/` 로 복사하고, HTML 을 쓰고, Chromium 으로 PDF 를 뽑는다. 값이 잘린 줄과 한 장을 넘는 항목을 경고한다 |
 | `.github/workflows/build.yml` | main 에 push 하면 빌드해서 GitHub Pages 에 올린다 |

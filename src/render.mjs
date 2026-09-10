@@ -18,13 +18,25 @@ const fields = (pairs) => {
 const judged = (j = {}) => [j.criterion, j.delegated, j.verification, j.discarded].some(has);
 
 // 일급 칸 넷 + 선택 하나. 프로젝트와 경력이 같은 칸을 쓴다.
-const judgment = (j = {}) => [
-  ["기준", esc(j.criterion)],
-  ["맡긴 것", esc(j.delegated)],
-  ["확인", esc(j.verification)],
-  ["버린 것", esc(j.discarded)],
-  ["안 쓴 결정", esc(j.not_used)],
-];
+// 한 상자로 묶어 항목 맨 앞에 둔다. 판단을 앞세우는 장치는 이것 하나다 (docs/design.md#장치).
+const judgment = (j = {}) => {
+  const body = fields([
+    ["기준", esc(j.criterion)],
+    ["맡긴 것", esc(j.delegated)],
+    ["확인", esc(j.verification)],
+    ["버린 것", esc(j.discarded)],
+    ["안 쓴 결정", esc(j.not_used)],
+  ]);
+  return body ? `<div class="judgment">${body}</div>` : "";
+};
+
+// 리포·주소·운영은 훑기의 넷째 단. 라벨을 떼고 설명 줄 아래 한 줄로 붙인다.
+const meta = (pairs) => {
+  const kept = pairs.filter(([, v]) => has(v));
+  return kept.length
+    ? `<p class="meta">${kept.map(([k, v]) => `<span class="k">${esc(k)}</span> ${v}`).join('<span class="sep">·</span>')}</p>`
+    : "";
+};
 
 function header(b = {}) {
   const contact = [b.email, b.phone, b.location].filter(has).map(esc);
@@ -53,12 +65,7 @@ const projects = (rows = []) =>
           head: esc(r.name),
           sub: esc(r.description),
           period: r.period,
-          body: fields([
-            ["리포", url(r.repo)],
-            ["주소", url(r.live)],
-            ["운영", esc(r.operation)],
-            ...judgment(r.judgment),
-          ]),
+          body: meta([["리포", url(r.repo)], ["주소", url(r.live)], ["운영", esc(r.operation)]]) + judgment(r.judgment),
         })
       )
       .join("")
@@ -74,7 +81,7 @@ const experience = (rows = []) =>
           head: esc(r.company),
           sub: [r.role, r.location].filter(has).map(esc).join(" · "),
           period: r.period,
-          body: fields(judgment(r.judgment)),
+          body: judgment(r.judgment),
         })
       )
       .join("")
