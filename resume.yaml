@@ -1,4 +1,7 @@
 # 이력서 원본. 이 파일만 고치면 된다. 비워 둔 항목은 출력에서 빠진다.
+# 칸마다 무엇을 묻는지 주석 한 줄을 달았다. 왜 이 칸이 있는지는 docs/format.md.
+# 값에 # 이 들어가면(PR 번호 등) 따옴표로 감싼다. 안 그러면 YAML 이 주석으로 먹는다.
+
 basics:
   name: 홍길동
   title: 백엔드 개발자
@@ -10,35 +13,59 @@ basics:
       url: https://github.com/uwonu606
     - label: Blog
       url: ""
-  summary: >
-    두세 문장으로 나를 요약한다. 무엇을 만들어 왔고, 무엇을 잘하고,
-    어떤 일을 하고 싶은지.
+  # 한 문장. 에이전트가 만든 것이 아니라 내가 맡은 것이 무엇인가.
+  # 아래 항목 최소 둘로 증명되지 않으면 자기소개일 뿐이니 문장을 고친다.
+  summary: 구현은 에이전트에게 맡기고, 무엇을 옳음으로 볼지는 직접 정해 온 백엔드 개발자.
 
-skills:
-  - category: 언어
-    items: [Java, TypeScript, Python]
-  - category: 프레임워크
-    items: [Spring Boot, React]
-  - category: 인프라
-    items: [Docker, GitHub Actions, AWS]
-
-experience:
-  - company: 회사 이름
-    role: 직무
-    period: 2025.01 – 현재
-    location: 서울
-    bullets:
-      - 무엇을 왜 만들었고 결과가 어땠는지 한 줄로. 수치가 있으면 붙인다.
-      - 문제 → 선택한 방법 → 결과 순으로 쓰면 읽기 쉽다.
-
+# 프로젝트당 판단 하나. judgment 네 칸을 채울 수 없으면 항목으로 두지 않는다.
+# 판단이 둘 이상이면 프로젝트를 둘로 나눠 쓰거나 하나를 고른다.
+# 네 칸이 모두 비면 그 항목은 출력에서 빠진다 — 채우면 나타난다.
 projects:
   - name: 프로젝트 이름
     period: 2024.09 – 2024.12
-    url: https://github.com/uwonu606/example
     description: 한 줄 설명. 누구를 위한 무엇인가.
-    stack: [Spring Boot, PostgreSQL, Docker]
-    bullets:
-      - 맡은 역할과 가장 어려웠던 문제, 그리고 어떻게 풀었는지.
+    repo: https://github.com/uwonu606/example
+    live: ""        # 지금 열리는 주소만 적는다. 죽은 링크는 비운다.
+    operation: ""   # 운영 기간·사용자 수. 있을 때만.
+    judgment:
+      criterion: ""    # 무엇을 완료·옳음으로 봤나. 그 기준을 누가 정했나.
+      delegated: ""    # 무엇을 어디까지 에이전트에게 맡겼나.
+      verification: "" # 어떻게 확인했나. PR·커밋 주소를 적어도 된다. ("... (PR #41)" 처럼 # 이 있으면 따옴표 필수)
+      discarded: ""    # 무엇을 버렸나. 에이전트가 낸 답 중 왜 그것을 안 골랐나.
+      not_used: ""     # (선택) AI 를 안 쓰기로 한 결정, 또는 결과를 되돌린 사례.
+
+# 인턴·계약·아르바이트. 회사 이름이 정보값을 가질 때만 쓴다.
+# 칸은 프로젝트와 같다. 기간과 담당 업무를 늘어놓는 자리가 아니다.
+experience:
+  - company: 회사 이름
+    role: 직무
+    period: 2025.01 – 2025.03
+    location: 서울
+    judgment:
+      criterion: ""
+      delegated: ""
+      verification: ""
+      discarded: ""
+      not_used: ""
+
+# 에이전트가 직접 소비하는 것만. 스킬·컨텍스트 파일·훅·린터·CI·워크플로.
+# 반복되던 문제와 넣은 장치를 못 적으면 항목이 아니다 — 둘 다 비면 출력에서 빠진다.
+environment:
+  - name: 만든 것 이름
+    repo: ""        # 리포나 리포 안 경로.
+    problem: ""     # 에이전트가 반복하던 실수나 반복 작업이 무엇이었나.
+    device: ""      # 무엇을 넣어 그것을 막았나.
+
+# 이름 나열이 아니라 깊이를 가르는 칸이다.
+skills:
+  hands_on: [Java, Spring Boot, PostgreSQL]   # 직접 써서 만든 것.
+  can_read: [Kubernetes, Kafka]               # 직접 만들지는 않았지만 읽고 고칠 수 있는 것.
+
+# 배운 것을 남에게 옮긴 흔적. 글·발표·팀에 들여온 도구.
+writing:
+  - title: 글 제목
+    url: ""
+    note: ""        # 한 줄. 무엇을 다뤘나.
 
 education:
   - school: 학교 이름

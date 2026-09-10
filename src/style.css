@@ -2,27 +2,30 @@
 * { box-sizing: border-box; }
 body {
   font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
-  color: var(--ink); font-size: 10.5pt; line-height: 1.5; max-width: 190mm; margin: 0 auto; padding: 8mm 0;
+  color: var(--ink); font-size: 10.5pt; line-height: 1.55; max-width: 190mm; margin: 0 auto; padding: 8mm 0;
 }
 a { color: var(--accent); text-decoration: none; }
 header h1 { font-size: 22pt; margin: 0; letter-spacing: -0.02em; }
 header .title { margin: 2px 0 6px; color: var(--muted); font-size: 12pt; }
 header .contact { margin: 0; font-size: 9.5pt; }
 header .sep { margin: 0 6px; color: var(--line); }
-header .summary { margin: 10px 0 0; }
-section { margin-top: 16px; break-inside: avoid; }
-h2 { font-size: 12pt; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 3px; margin: 0 0 8px; }
-article { margin-bottom: 10px; break-inside: avoid; }
+header .summary { margin: 10px 0 0; font-size: 11pt; }
+
+/* 여러 장을 흐르게 둔다. 섹션은 쪼개지되 항목 하나는 쪼개지지 않는다. */
+section { margin-top: 18px; }
+h2 { font-size: 12pt; color: var(--accent); border-bottom: 1px solid var(--line); padding-bottom: 3px; margin: 0 0 8px; break-after: avoid; }
+article { margin-bottom: 12px; break-inside: avoid; }
 .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
 .period { color: var(--muted); font-size: 9.5pt; white-space: nowrap; }
 .sub { color: var(--muted); font-size: 9.5pt; }
 .muted { color: var(--muted); }
-ul { margin: 4px 0 0; padding-left: 18px; }
-ul.plain { list-style: none; padding: 0; }
-ul.plain li { margin-bottom: 2px; }
+
+/* 라벨은 작고 흐리게, 값은 본문 크기로. 훑을 때는 값만 읽히고 자세히 볼 때 라벨이 잡힌다. */
+dl.fields { display: grid; grid-template-columns: max-content 1fr; gap: 1px 10px; margin: 5px 0 0; }
+dl.fields dt { color: var(--muted); font-size: 8.5pt; white-space: nowrap; padding-top: 2.5px; }
+dl.fields dd { margin: 0; }
+
+ul.plain { list-style: none; margin: 4px 0 0; padding: 0; }
 li { margin-bottom: 2px; }
-table.skills { border-collapse: collapse; }
-table.skills th { text-align: left; padding: 2px 16px 2px 0; white-space: nowrap; font-weight: 600; vertical-align: top; }
-table.skills td { padding: 2px 0; }
 @page { size: A4; }
 @media print { body { padding: 0; max-width: none; } }

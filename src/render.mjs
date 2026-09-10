@@ -2,9 +2,29 @@
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const has = (v) => (Array.isArray(v) ? v.length > 0 : v !== undefined && v !== null && String(v).trim() !== "");
-const list = (items) => (has(items) ? `<ul>${items.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : "");
 const section = (title, body) => (body ? `<section><h2>${esc(title)}</h2>${body}</section>` : "");
 const link = (l) => (has(l.url) ? `<a href="${esc(l.url)}">${esc(l.label || l.url)}</a>` : "");
+const url = (u) => (has(u) ? `<a href="${esc(u)}">${esc(String(u).replace(/^https?:\/\//, ""))}</a>` : "");
+
+// 라벨을 작게 앞에 붙이고 값을 한 줄씩. 빈 칸은 줄째로 빠진다.
+const fields = (pairs) => {
+  const kept = pairs.filter(([, v]) => has(v));
+  return kept.length
+    ? `<dl class="fields">${kept.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("")}</dl>`
+    : "";
+};
+
+// 일급 칸 넷 중 하나라도 채워져야 항목이다. 다 비면 출력에서 빠진다 (docs/format.md#규약).
+const judged = (j = {}) => [j.criterion, j.delegated, j.verification, j.discarded].some(has);
+
+// 일급 칸 넷 + 선택 하나. 프로젝트와 경력이 같은 칸을 쓴다.
+const judgment = (j = {}) => [
+  ["기준", esc(j.criterion)],
+  ["맡긴 것", esc(j.delegated)],
+  ["확인", esc(j.verification)],
+  ["버린 것", esc(j.discarded)],
+  ["안 쓴 결정", esc(j.not_used)],
+];
 
 function header(b = {}) {
   const contact = [b.email, b.phone, b.location].filter(has).map(esc);
@@ -17,58 +37,102 @@ function header(b = {}) {
 </header>`;
 }
 
-const skills = (rows = []) =>
-  section(
-    "기술",
-    has(rows)
-      ? `<table class="skills">${rows
-          .filter((r) => has(r.items))
-          .map((r) => `<tr><th>${esc(r.category)}</th><td>${r.items.map(esc).join(", ")}</td></tr>`)
-          .join("")}</table>`
-      : ""
-  );
-
 const entry = ({ head, sub, period, body }) => `<article>
-  <div class="row"><strong>${head}</strong><span class="period">${esc(period)}</span></div>
+  <div class="row"><strong>${head}</strong>${has(period) ? `<span class="period">${esc(period)}</span>` : ""}</div>
   ${sub ? `<div class="sub">${sub}</div>` : ""}
   ${body}
 </article>`;
-
-const experience = (rows = []) =>
-  section(
-    "경력",
-    rows
-      .map((r) =>
-        entry({
-          head: esc(r.company),
-          sub: [r.role, r.location].filter(has).map(esc).join(" · "),
-          period: r.period,
-          body: list(r.bullets),
-        })
-      )
-      .join("")
-  );
 
 const projects = (rows = []) =>
   section(
     "프로젝트",
     rows
+      .filter((r) => judged(r.judgment))
       .map((r) =>
         entry({
-          head: has(r.url) ? `<a href="${esc(r.url)}">${esc(r.name)}</a>` : esc(r.name),
-          sub: [r.description, has(r.stack) ? r.stack.map(esc).join(", ") : ""].filter(Boolean).map(esc).join(" — "),
+          head: esc(r.name),
+          sub: esc(r.description),
           period: r.period,
-          body: list(r.bullets),
+          body: fields([
+            ["리포", url(r.repo)],
+            ["주소", url(r.live)],
+            ["운영", esc(r.operation)],
+            ...judgment(r.judgment),
+          ]),
         })
       )
       .join("")
+  );
+
+const experience = (rows = []) =>
+  section(
+    "경력",
+    rows
+      .filter((r) => judged(r.judgment))
+      .map((r) =>
+        entry({
+          head: esc(r.company),
+          sub: [r.role, r.location].filter(has).map(esc).join(" · "),
+          period: r.period,
+          body: fields(judgment(r.judgment)),
+        })
+      )
+      .join("")
+  );
+
+const environment = (rows = []) =>
+  section(
+    "만든 환경",
+    rows
+      .filter((r) => has(r.problem) || has(r.device))
+      .map((r) =>
+        entry({
+          head: esc(r.name),
+          sub: "",
+          period: "",
+          body: fields([["리포", url(r.repo)], ["문제", esc(r.problem)], ["장치", esc(r.device)]]),
+        })
+      )
+      .join("")
+  );
+
+const skills = (s = {}) =>
+  section(
+    "기술",
+    fields([
+      ["직접 쓴 것", has(s.hands_on) ? s.hands_on.map(esc).join(", ") : ""],
+      ["읽고 고칠 수 있는 것", has(s.can_read) ? s.can_read.map(esc).join(", ") : ""],
+    ])
+  );
+
+const writing = (rows = []) =>
+  section(
+    "배움과 공유",
+    has(rows)
+      ? `<ul class="plain">${rows
+          .filter((r) => has(r.title))
+          .map(
+            (r) =>
+              `<li>${has(r.url) ? `<a href="${esc(r.url)}">${esc(r.title)}</a>` : esc(r.title)}${
+                has(r.note) ? ` <span class="muted">— ${esc(r.note)}</span>` : ""
+              }</li>`
+          )
+          .join("")}</ul>`
+      : ""
   );
 
 const education = (rows = []) =>
   section(
     "학력",
     rows
-      .map((r) => entry({ head: esc(r.school), sub: [r.degree, r.note].filter(has).map(esc).join(" · "), period: r.period, body: "" }))
+      .map((r) =>
+        entry({
+          head: esc(r.school),
+          sub: [r.degree, r.note].filter(has).map(esc).join(" · "),
+          period: r.period,
+          body: "",
+        })
+      )
       .join("")
   );
 
@@ -77,7 +141,12 @@ const certificates = (rows = []) =>
     "자격증",
     has(rows)
       ? `<ul class="plain">${rows
-          .map((r) => `<li><span class="row"><span>${esc(r.name)}${has(r.issuer) ? ` <span class="muted">(${esc(r.issuer)})</span>` : ""}</span><span class="period">${esc(r.date)}</span></span></li>`)
+          .map(
+            (r) =>
+              `<li><span class="row"><span>${esc(r.name)}${
+                has(r.issuer) ? ` <span class="muted">(${esc(r.issuer)})</span>` : ""
+              }</span><span class="period">${esc(r.date)}</span></span></li>`
+          )
           .join("")}</ul>`
       : ""
   );
@@ -92,9 +161,11 @@ export function render(data, css) {
 </head>
 <body>
 ${header(data.basics)}
-${skills(data.skills)}
-${experience(data.experience)}
 ${projects(data.projects)}
+${experience(data.experience)}
+${environment(data.environment)}
+${skills(data.skills)}
+${writing(data.writing)}
 ${education(data.education)}
 ${certificates(data.certificates)}
 </body>
