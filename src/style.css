@@ -14,7 +14,6 @@ body {
   word-break: keep-all; overflow-wrap: anywhere;
 }
 a { color: var(--accent); text-decoration: none; }
-.sep { margin: 0 6px; color: var(--line); }
 .muted { color: var(--muted); }
 
 /* 위계 1단: 이름·직함. 2단: 요약. 사진은 머리글 높이 안, 3:4. 좁아지면 이름 위로 (docs/design.md#위계). */
@@ -39,9 +38,14 @@ article { margin-bottom: 14px; break-inside: avoid; }
 .period { color: var(--muted); font-size: 9.5pt; white-space: nowrap; }
 .sub { color: var(--muted); font-size: 9.5pt; }
 
+/* 나란한 조각은 간격으로 가른다. 렌더러가 가운뎃점을 안 찍는다. */
+header .contact, .parts, .meta { display: flex; flex-wrap: wrap; gap: 1px 16px; }
+
 /* 넷째 단. 라벨 없이 한 줄. */
 .meta { margin: 2px 0 0; font-size: 9pt; }
 .meta .k { color: var(--muted); margin-right: 3px; }
+
+ul.notes .muted { display: block; font-size: 9pt; }
 
 /* 위계 3단, 장치 하나. 판단 네 칸을 옅은 배경 상자로 (docs/design.md#장치). */
 .judgment { margin: 6px 0 0; padding: 7px 10px; background: var(--box); border-radius: 3px; }

@@ -6,6 +6,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
 import { render } from "./render.mjs";
 
+const has = (v) => v !== undefined && v !== null && String(v).trim() !== "";
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const htmlOnly = args.includes("--html-only");
@@ -31,24 +33,36 @@ function warnTruncated(src) {
 const src = readFileSync(input, "utf8");
 warnTruncated(src);
 const data = YAML.parse(src);
-const css = readFileSync(resolve(root, "src/style.css"), "utf8");
+
+// 내용 파일이 자기 옷을 고른다. theme 이 없거나 그 파일이 없으면 기본 모양으로 떨어진다.
+const themed = has(data.theme) ? resolve(root, `src/style.${data.theme}.css`) : null;
+const cssPath = themed && existsSync(themed) ? themed : resolve(root, "src/style.css");
+if (themed && !existsSync(themed)) console.warn(`! theme "${data.theme}" 의 CSS 가 없다: ${themed}. 기본 모양으로 뽑는다`);
+const css = readFileSync(cssPath, "utf8");
+console.log("style", cssPath.slice(root.length + 1));
 
 const dist = resolve(root, "dist");
 mkdirSync(resolve(dist, "fonts"), { recursive: true });
 
-// 글꼴과 사진은 HTML 이 상대 경로로 가리킨다. dist 에 같이 둬야 웹과 PDF 가 같은 파일을 본다.
+// 글꼴·사진·마크는 HTML 이 상대 경로로 가리킨다. dist 에 같이 둬야 웹과 PDF 가 같은 파일을 본다.
 copyFileSync(resolve(root, "assets/fonts/Pretendard.woff2"), resolve(dist, "fonts/Pretendard.woff2"));
-if (data.basics?.photo) {
-  const src = resolve(dirname(input), data.basics.photo);
-  if (existsSync(src)) {
-    const name = "photo" + src.slice(src.lastIndexOf("."));
-    copyFileSync(src, resolve(dist, name));
-    data.basics.photo = name;
+
+// 없는 파일을 가리키면 자리째로 뺀다 — 깨진 그림 자리가 남는 것보다 낫다.
+function stage(key, base) {
+  const rel = data.basics?.[key];
+  if (!rel) return;
+  const from = resolve(dirname(input), rel);
+  if (existsSync(from)) {
+    const name = base + from.slice(from.lastIndexOf("."));
+    copyFileSync(from, resolve(dist, name));
+    data.basics[key] = name;
   } else {
-    console.warn(`! 사진이 없다: ${src}. 자리째로 뺀다`);
-    data.basics.photo = "";
+    console.warn(`! ${key} 파일이 없다: ${from}. 자리째로 뺀다`);
+    data.basics[key] = "";
   }
 }
+stage("photo", "photo");
+stage("mark", "mark");
 
 const html = render(data, css);
 const htmlPath = resolve(dist, "resume.html");
@@ -75,12 +89,9 @@ if (!htmlOnly) {
   for (const [name, height] of tall) console.warn(`! 항목이 한 장(${pageH}px)을 넘는다: "${name}" ${height}px. 장 경계에서 쪼개진다`);
 
   const pdfPath = resolve(dist, "resume.pdf");
-  await page.pdf({
-    path: pdfPath,
-    format: "A4",
-    printBackground: true,
-    margin: { top: "14mm", bottom: "14mm", left: "14mm", right: "14mm" },
-  });
+  // 여백은 CSS @page 가 정한다. 첫 장만 위쪽 여백을 걷어 빨강 띠가 종이 끝에 닿는다.
+  // 여기서 margin 을 주면 그 규칙이 덮여서 띠가 안쪽으로 밀린다.
+  await page.pdf({ path: pdfPath, preferCSSPageSize: true, printBackground: true });
   await browser.close();
   console.log("wrote", pdfPath);
 }

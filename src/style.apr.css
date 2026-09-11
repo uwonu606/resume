@@ -1,0 +1,522 @@
+/* 에이피알 지원용 가지의 모양. 왜 이런지는 docs/design.apr.md, 여기는 값만.
+   명제: 정렬은 엄격하게, 여백은 넉넉하게. 빨강은 장식이 아니라 경계선을 칠하는 색이다. */
+@font-face {
+  font-family: "Pretendard";
+  src: url("fonts/Pretendard.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  /* 에이피알 공식 CI 규격 (apr-in.com/apr_ci.html). 원본 파일 픽셀은 #EA0A2A 지만 규격값을 쓴다. */
+  --accent: #e6002a;      /* APR Red */
+  --accent-soft: #f4abaf; /* APR Red 40% */
+  --ink: #3e3a39;         /* APR Black */
+  --ink-soft: #5c5654;    /* 판단 칸의 근거 층. 주장보다 한 단계 물러선다 */
+  --muted: #7c7674;
+  --line: #dedede;
+  --chip: #efeeec;
+  --face: #f5f4f2;        /* 항목의 제목 띠. 칩보다 옅어야 띠가 상자로 안 읽힌다 */
+  --arrow: #b6b1af;       /* 흐름도의 선. 상자보다 약해야 상자가 읽힌다 */
+
+  /* 여백 리듬. 화면에서 한 단계 크게 잡고 인쇄에서 되돌린다. */
+  --gutter: 20px;
+  --gap-section: 38px;
+  --gap-entry: 24px;
+  --masthead-top: 44px;
+  --masthead-bottom: 38px;
+}
+
+* { box-sizing: border-box; }
+
+/* 자간을 0 쪽으로 풀었다. 딱딱함은 글꼴이 아니라 조인 자간과 층 없는 문단에서 왔다
+   (docs/design.apr.md#딱딱함). */
+body {
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  color-scheme: light only;
+  font-size: 10.5pt;
+  line-height: 1.68;
+  letter-spacing: 0.005em;
+  max-width: 190mm;
+  margin: 0 auto;
+  padding: 0 var(--gutter) 40px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.muted { color: var(--muted); }
+
+/* ── 머리글 ──────────────────────────────────────────────
+   화면에서는 빨강 면이 문구·로고·이름·직함을 품는다.
+   인쇄에서는 면이 띠로 얕아지고 이름이 흰 바탕으로 내려온다. */
+.masthead {
+  background: var(--accent);
+  color: #fff;
+  margin-inline: calc(50% - 50vw);
+  padding: 0 max(var(--gutter), calc(50vw - 95mm)) var(--masthead-bottom);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0 var(--masthead-top);
+}
+.banner .target {
+  margin: 0;
+  font-size: 9.5pt;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+.banner .mark { height: 26px; width: auto; flex: none; }
+
+.masthead h1 {
+  margin: 0;
+  font-size: 38pt;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+/* 빨강 위에서는 연분홍이 대비 4:1 을 못 넘긴다. 색을 흰색으로 두고 크기와 굵기로 위계를 만든다. */
+.masthead .title {
+  margin: 10px 0 0;
+  font-size: 12pt;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+header .contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 22px 0 0;
+  font-size: 9.5pt;
+  color: var(--muted);
+}
+header .contact a { color: var(--accent); }
+
+/* 요약은 표지 카피가 아니라 읽으라고 있는 문장이다. 흰 바탕 첫 블록에 크게 놓는다. */
+header .summary {
+  margin: 16px 0 0;
+  font-size: 13pt;
+  font-weight: 500;
+  line-height: 1.55;
+  max-width: 34em;
+}
+
+header .photo { width: 27mm; aspect-ratio: 3 / 4; object-fit: cover; margin-top: 16px; }
+
+/* ── 본문 ─────────────────────────────────────────────── */
+section { margin-top: var(--gap-section); }
+
+h2 {
+  font-size: 10.5pt;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--accent-soft);
+  break-after: avoid;
+}
+
+article { margin-bottom: var(--gap-entry); break-inside: avoid; }
+.row { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+.row strong { font-size: 13pt; font-weight: 700; letter-spacing: -0.005em; }
+.period { color: var(--muted); font-size: 9.5pt; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sub { color: var(--muted); font-size: 9.5pt; margin-top: 4px; }
+
+/* ── 항목 사이 ─────────────────────────────────────────
+   프로젝트와 작업 환경 항목은 제목 띠가 가른다 — 첫 줄(번호·제목·기간)만 옅은 면에 담고
+   왼쪽 모서리를 빨강으로 긋는다. 본문은 흰 바탕이다. 번호는 두 섹션을 이어 센다.
+   항목 전체를 면에 담는 길은 면 여섯이 화면을 무겁게 했고, 굵은 가로선만으로는 한눈에
+   안 갈렸다. 띠는 시작을 또렷하게 하고 끝은 여백이 맡는다 (docs/design.apr.md#장치). */
+#projects article,
+#environment article { border-left: 3px solid var(--accent); }
+#projects article > .row,
+#environment article > .row {
+  padding: 12px 18px 12px 16px;
+  background: var(--face);
+  border-radius: 0 4px 4px 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* 세로선이 항목 끝까지 내려와 띠가 머리, 선이 몸통이 된다. 띠만으로는 시작은 보여도
+   끝이 안 보여서 다음 띠가 같은 항목의 또 다른 굵은 줄로 읽혔다. 본문은 선에서 띄운다. */
+#projects article > .sub,
+#projects article > .stack,
+#projects article > .meta,
+#projects article > figure,
+#projects article > .judgment,
+#environment article > figure,
+#environment article > .pair { margin-left: 16px; }
+#projects article > .sub { margin-top: 12px; }
+#projects article > .judgment { margin-left: 16px; }
+#projects article + article,
+#environment article + article { margin-top: 48px; }
+/* 섹션 제목의 밑선과 첫 띠가 붙으면 가로선 둘이 겹쳐 선다. 첫 띠만 제목에서 더 띄운다. */
+#projects > h2, #environment > h2 { margin-bottom: 26px; }
+#projects .row strong,
+#environment .row strong { display: flex; align-items: baseline; gap: 12px; }
+.n {
+  font-size: 10pt;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 쓴 기술은 이름만. 판단보다 약하게 둔다 — 흔한 이력서의 "사용 기술" 줄로 서면 안 된다. */
+.stack { margin: 8px 0 0; font-size: 9pt; color: var(--muted); letter-spacing: 0.01em; }
+
+/* 나란한 조각은 간격으로 가른다. 가운뎃점은 읽는 데 보태는 게 없다. */
+.parts, .meta { display: flex; flex-wrap: wrap; gap: 2px 18px; margin: 4px 0 0; }
+.meta { font-size: 9pt; }
+.meta .k { color: var(--muted); margin-right: 5px; }
+
+/* ── 흐름도 ────────────────────────────────────────────
+   상자 모양이 "누가 하나" 를 말한다 — LLM 은 윤곽선, 기계·실물은 채움, 판정 자리만 빨강.
+   상자 안 꼬리표가 범례를 대신한다 (docs/design.apr.md#흐름도). */
+figure.flow { margin: 18px 0 4px; padding: 18px 0 0; break-inside: avoid; }
+/* 되돌이 고리는 상자 위로 솟는다. 고리가 있는 그림만 머리 공간을 더 준다 —
+   전부에 주면 고리 없는 그림 둘이 이유 없이 내려앉는다. */
+figure.flow:has(.loop) { padding-top: 32px; }
+
+.flow .track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 0;
+}
+
+.flow .cell { position: relative; display: flex; align-items: center; gap: 7px; }
+
+/* 화살표는 선 하나와 촉 하나다. 글자 →  를 안 쓴 이유는 서브셋 글꼴에 없을 수 있어서다. */
+.flow .cell + .cell { margin-left: 25px; }
+.flow .cell + .cell::before {
+  content: "";
+  position: absolute;
+  left: -21px;
+  top: 50%;
+  width: 15px;
+  height: 1px;
+  background: var(--arrow);
+}
+.flow .cell + .cell::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-top: 1px solid var(--arrow);
+  border-right: 1px solid var(--arrow);
+  transform: rotate(45deg);
+}
+
+.flow .node {
+  position: relative;
+  padding: 3px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 9pt;
+  line-height: 1.4;
+  color: var(--muted);
+  white-space: nowrap;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.flow .node i { font-style: normal; margin-left: 6px; font-size: 7pt; letter-spacing: 0.05em; opacity: 0.7; }
+.flow .node.llm { border-color: var(--line); background: #fff; color: var(--ink); }
+.flow .node.machine { background: var(--chip); color: var(--ink); }
+.flow .node.verdict { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* 곁말은 단계가 아니다. 괄호로 묶어야 상자 옆의 또 다른 상자로 안 읽힌다. */
+.flow .cell em { font-style: normal; font-size: 8.5pt; color: var(--muted); white-space: nowrap; }
+.flow .cell em::before { content: "("; }
+.flow .cell em::after { content: ")"; }
+
+/* 되돌이. 그 단계 위에 걸치는 고리로 그린다 — 재시도해도 아래 단계가 안 흔들린다는 말이다. */
+.flow .node .loop {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  transform: translateX(-50%);
+  padding: 0 9px 3px;
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 7.5pt;
+  line-height: 1.5;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* 갈래는 흐름 끝에서 한 번 갈리고 다시 안 합쳐진다. */
+.flow .branch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-left: 27px;
+  padding-left: 17px;
+}
+.flow .branch::before {
+  content: "";
+  position: absolute;
+  left: -27px;
+  top: 50%;
+  width: 27px;
+  height: 1px;
+  background: var(--arrow);
+}
+.flow .branch::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 1px;
+  background: var(--arrow);
+}
+.flow .lane { position: relative; display: flex; align-items: center; }
+.flow .lane::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  top: 50%;
+  width: 11px;
+  height: 1px;
+  background: var(--arrow);
+}
+.flow .lane::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-top: 1px solid var(--arrow);
+  border-right: 1px solid var(--arrow);
+  transform: rotate(45deg);
+}
+
+/* 캡션은 선택이다. 흐름이 그 자체로 명확하면 YAML 이 비우고 이 줄은 안 나온다. */
+.flow figcaption { margin-top: 16px; }
+.flow figcaption b {
+  display: block;
+  font-size: 11.5pt;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+.flow figcaption p { margin: 6px 0 0; color: var(--ink-soft); max-width: 44em; }
+
+/* ── 판단 칸 ──────────────────────────────────────────────
+   판단을 앞세우는 장치는 하나다 — 왼쪽 빨간 세로선 하나로 묶는다.
+   칩을 걷은 이유는 알약 여섯이 반복되면 격자로 읽혀서다 (docs/design.apr.md#층). */
+.judgment {
+  margin: 16px 0 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent-soft);
+}
+
+dl.fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 14px;
+  margin: 0;
+  align-items: start;
+}
+dl.fields dt {
+  justify-self: start;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+dl.fields.accent dt { color: var(--accent); margin-top: 5px; }
+dl.fields.grey dt { color: var(--muted); margin-top: 2px; }
+dl.fields dd { margin: 0; }
+
+/* 칸 하나가 세 층이다 — 그림에서 이어지는 질문, 주장 한 줄, 그 아래 근거.
+   질문이 길어 왼쪽 열에 못 서므로 세로로 쌓는다. 정렬 축은 왼쪽 빨간 선이 대신 잡는다.
+   칸과 칸 사이는 가는 선이 가른다. 여백만으로는 셋째 칸쯤에서 어디가 다음인지 눈이 놓쳤다.
+   주장은 캡션보다 한 단계 작다 — 같은 크기면 프로젝트 안에 굵은 줄이 넷 서서 층이 안 갈린다. */
+.judgment { margin-top: 22px; }
+.judgment dl.fields { grid-template-columns: 1fr; gap: 0; }
+.judgment dl.fields dt { margin-top: 0; white-space: normal; font-size: 9pt; font-weight: 600; letter-spacing: 0.01em; }
+.judgment dl.fields dt + dd + dt { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.judgment dl.fields dd { margin-top: 3px; }
+.judgment dd b {
+  display: block;
+  font-size: 10.5pt;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+.judgment dd b + span { display: block; margin-top: 5px; color: var(--ink-soft); }
+
+article > dl.fields { margin-top: 10px; }
+
+/* ── 에이전트 작업 환경 ───────────────────────────────
+   문제와 장치를 마주 세운다. 셋이 나란히 서면 "반복되던 문제에 장치를 넣는다" 가
+   세 번 증명된 것으로 읽힌다. 항목은 프로젝트와 같은 면·같은 제목 크기다 — 이 섹션이
+   에이전트를 어떻게 부리는지를 보이는 자리라 프로젝트보다 약할 이유가 없다 (docs/design.apr.md#작업-환경). */
+article.tool .row a { font-size: 9pt; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; margin-top: 14px; }
+article.tool figure.flow + .pair { margin-top: 20px; }
+.pair .side p { margin: 0; }
+.pair .k {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+/* ── 목록 ─────────────────────────────────────────────── */
+ul.plain { list-style: none; margin: 0; padding: 0; }
+ul.plain > li { margin-bottom: 8px; }
+ul.plain > li:last-child { margin-bottom: 0; }
+
+ul.skills { break-inside: avoid; }
+ul.skills .k { color: var(--muted); font-size: 8.5pt; letter-spacing: 0.03em; margin-right: 8px; }
+/* 묶음은 두 열이다 — 이름이 왼쪽에 서고 깊이가 오른쪽에 선다. 이름 열이 곧 묶음 사이의 경계라
+   선을 안 긋는다. 넷에 선을 그으면 표가 된다. 프로젝트의 stack 줄과 짝이다. */
+dl.skills {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 12px 28px;
+  margin: 0;
+  align-items: start;
+  break-inside: avoid;
+}
+dl.skills dt { font-weight: 600; letter-spacing: -0.005em; }
+dl.skills dd { margin: 0; color: var(--ink-soft); font-size: 10pt; }
+dl.skills + ul.skills { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+ul.notes .muted { display: block; font-size: 9.5pt; margin-top: 1px; }
+
+/* ── 좁은 화면 ─────────────────────────────────────────
+   두 열이 못 서면 라벨이 값 위로 올라간다. 정렬 축을 잃는 대신 줄 길이를 지킨다. */
+@media (max-width: 640px) {
+  :root { --gutter: 18px; --gap-section: 30px; --masthead-top: 32px; --masthead-bottom: 28px; }
+  .masthead h1 { font-size: 28pt; }
+  header .summary { font-size: 12pt; }
+  .banner { flex-direction: row; align-items: flex-start; }
+  .banner .mark { height: 22px; }
+  dl.fields { grid-template-columns: 1fr; gap: 3px; }
+  dl.fields dt { margin-bottom: 2px; }
+  dl.fields dd { margin-bottom: 13px; }
+  #projects article + article,
+  #environment article + article { margin-top: 32px; }
+  #projects article > .row,
+  #environment article > .row { padding: 10px 12px; }
+  #projects article > .sub, #projects article > .stack, #projects article > .meta,
+  #projects article > figure, #projects article > .judgment,
+  #environment article > figure, #environment article > .pair { margin-left: 12px; }
+  .row { flex-direction: column; gap: 2px; }
+  .pair { grid-template-columns: 1fr; gap: 14px; }
+  dl.skills { grid-template-columns: 1fr; gap: 4px; }
+  dl.skills dd { margin-bottom: 10px; }
+  .flow .node { white-space: normal; }
+  /* 줄이 접히면 갈래가 새 줄로 내려가 앞 단계에서 들어오는 선이 허공에 뜬다.
+     그 선을 걷고 갈래를 왼쪽에 붙인다 — 세로 괄호만으로도 둘이 한 묶음으로 읽힌다. */
+  .flow .branch { margin-left: 0; padding-left: 14px; }
+  .flow .branch::before { display: none; }
+  .flow .lane::before { left: -14px; width: 8px; }
+  .flow .lane::after { left: -7px; }
+}
+
+/* ── 인쇄 ─────────────────────────────────────────────
+   첫 장 위쪽 여백만 걷어 빨강 띠가 종이 끝에 닿게 한다.
+   나머지 장은 위아래 14mm 를 지킨다 (docs/design.apr.md#매체). */
+@page { size: A4; margin: 14mm 0; }
+@page :first { margin-top: 0; }
+
+@media print {
+  :root {
+    --gutter: 14mm;
+    --gap-section: 14px;
+    --gap-entry: 11px;
+    --masthead-top: 0px;
+    --masthead-bottom: 0px;
+  }
+  body {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1.55;
+  }
+  header > .contact, header > .summary, header > .photo, section { padding-inline: var(--gutter); }
+
+  /* 면이 띠로 얕아진다. 빨강은 문구와 로고만 품고 이름은 흰 바탕으로 내려온다. */
+  .masthead { background: none; color: var(--ink); margin-inline: 0; padding: 0; }
+  .banner {
+    background: var(--accent);
+    color: #fff;
+    padding: 4mm var(--gutter);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .banner .mark { height: 22px; }
+  .masthead .who { padding: 7mm var(--gutter) 0; }
+  .masthead h1 { font-size: 25pt; }
+  .masthead .title { color: var(--muted); margin-top: 4px; font-size: 11pt; }
+
+  header .contact { margin-top: 11px; }
+  header .summary { margin-top: 10px; font-size: 11.5pt; line-height: 1.5; }
+
+  h2 { margin-bottom: 8px; padding-bottom: 4px; }
+  #projects > h2, #environment > h2 { margin-bottom: 16px; }
+  .row strong { font-size: 12.5pt; }
+  .sub { margin-top: 3px; }
+
+  /* 프로젝트 하나가 한 장을 갖는다. 첫 프로젝트만 머리글과 같은 장에 선다
+     — 표지 한 장은 신입 이력서에서 값이 비싸다. 작업 환경은 한 장에서 흐르고
+     항목이 장 사이에서 잘리지만 않게 한다 (docs/design.apr.md#길이). */
+  #projects article + article,
+  #environment,
+  #tail { break-before: page; }
+  #projects article + article > .row,
+  #environment > h2,
+  #tail > h2 { margin-top: 0; }
+
+  #projects article > .row,
+  #environment article > .row { padding: 8px 14px 8px 12px; }
+  #projects article > .sub { margin-top: 8px; }
+  #projects article + article { margin-top: 0; }
+  #environment article + article { margin-top: 18px; }
+  .stack { margin-top: 5px; }
+  .flow figcaption { margin-top: 12px; }
+  .flow figcaption b { font-size: 11pt; }
+  .flow figcaption p { margin-top: 4px; }
+  .judgment { margin-top: 14px; padding-left: 11px; }
+  .judgment dl.fields dt + dd + dt { margin-top: 11px; padding-top: 11px; }
+  dl.skills { gap: 8px 22px; }
+  .judgment dd b { font-size: 10.5pt; }
+  .judgment dd b + span { margin-top: 4px; }
+  dl.fields { gap: 3px 12px; }
+  article > dl.fields { margin-top: 7px; }
+
+  figure.flow { margin: 14px 0 2px; padding-top: 16px; }
+  figure.flow:has(.loop) { padding-top: 30px; }
+
+  ul.plain > li { margin-bottom: 3px; }
+  ul.notes .muted { font-size: 9pt; }
+  a { text-decoration: none; }
+}
