@@ -148,6 +148,8 @@ const projects = (rows = []) =>
       .join(""),
     "projects"
   );
+// 에이피알 가지에서는 작업 환경이 번호를 이어 센다 — 만든 것 여섯을 한 줄로 세는 번호다.
+// 범용은 그 결정을 아직 안 받아서 잇지 않는다 (docs/design.apr.md#작업-환경).
 const kept = (rows = []) => rows.filter((r) => judged(r.judgment));
 
 const experience = (rows = []) =>
@@ -169,14 +171,19 @@ const experience = (rows = []) =>
 // 리포·문제·장치 세 칸은 실은 한 문장이었다 — 이런 문제가 반복돼서 이런 장치를 넣었다.
 // 문제와 장치를 두 열로 마주 세우면 셋이 나란히 설 때 그 문장이 세 번 증명된 것으로 읽힌다.
 // 리포는 칸에서 빼 제목 옆으로 올린다 — 그것은 판단이 아니라 주소다.
-const environment = (rows = []) =>
+// 항목은 프로젝트와 같은 무게다. 번호를 프로젝트 뒤에 이어 달고, 판정 자리가 있는 항목은
+// 흐름도를 두 열 위에 얹는다 (docs/design.apr.md#작업-환경).
+const environment = (rows = [], start = 0) =>
   section(
     "에이전트 작업 환경",
     rows
       .filter((r) => has(r.problem) || has(r.device))
       .map(
-        (r) => `<article class="tool">
-  <div class="row"><strong>${esc(r.name)}</strong>${has(r.repo) ? url(r.repo) : ""}</div>
+        (r, i) => `<article class="tool">
+  <div class="row"><strong>${start ? `<span class="n">${String(start + i + 1).padStart(2, "0")}</span>` : ""}${esc(
+          r.name
+        )}</strong>${has(r.repo) ? url(r.repo) : ""}</div>
+  ${flow(r.flow)}
   <div class="pair">
     <div class="side"><span class="k">반복되던 문제</span><p>${esc(r.problem)}</p></div>
     <div class="side"><span class="k">넣은 장치</span><p>${esc(r.device)}</p></div>
@@ -274,7 +281,7 @@ export function render(data, css) {
 ${header(data.basics)}
 ${projects(data.projects)}
 ${experience(data.experience)}
-${environment(data.environment)}
+${environment(data.environment, data.theme === "apr" ? kept(data.projects).length : 0)}
 ${skills(data.skills)}
 ${writing(data.writing)}
 ${training(data.training)}
